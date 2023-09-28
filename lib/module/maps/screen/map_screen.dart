@@ -16,7 +16,8 @@ import 'package:max_maps_picker/widget/text/text_widget.dart';
 
 class MapsPicker extends StatefulWidget {
   String apiKey;
-  MapsPicker({Key? key, required this.apiKey}) : super(key: key);
+  MapResult? mapData;
+  MapsPicker({Key? key, required this.apiKey, this.mapData}) : super(key: key);
 
   @override
   State<MapsPicker> createState() => _MapsPickerState();
@@ -37,7 +38,12 @@ class _MapsPickerState extends State<MapsPicker> {
 
   _init() {
     //set default latlng for camera position
-    _defaultLatLng = const LatLng(-6.902322378022154, 107.61872325317161);
+    if (widget.mapData != null) {
+      _defaultLatLng = LatLng(widget.mapData!.lat!, widget.mapData!.lng!);
+    } else {
+      _defaultLatLng = const LatLng(-6.902322378022154, 107.61872325317161);
+    }
+
     _draggedLatlng = _defaultLatLng;
     _cameraPosition =
         CameraPosition(target: _defaultLatLng, zoom: 17.5 // number of map view
