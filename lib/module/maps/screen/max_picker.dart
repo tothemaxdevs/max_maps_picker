@@ -7,11 +7,13 @@ class MaxMapsPicker extends StatefulWidget {
   MapResult? initialData;
   Function(MapResult)? onResult;
   Widget child;
+  Widget? marker;
   MaxMapsPicker(
       {Key? key,
-      this.onResult,
       required this.child,
       required this.apiKey,
+      this.onResult,
+      this.marker,
       this.initialData})
       : super(key: key);
 
@@ -35,6 +37,7 @@ class _MaxMapsPickerState extends State<MaxMapsPicker> {
                 builder: (context) => MapsPicker(
                       apiKey: widget.apiKey,
                       mapData: widget.initialData,
+                      marker: widget.marker,
                     )));
         if (maps != null) {
           widget.onResult!(maps);

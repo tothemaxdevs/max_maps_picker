@@ -17,7 +17,9 @@ import 'package:max_maps_picker/widget/text/text_widget.dart';
 class MapsPicker extends StatefulWidget {
   String apiKey;
   MapResult? mapData;
-  MapsPicker({Key? key, required this.apiKey, this.mapData}) : super(key: key);
+  Widget? marker;
+  MapsPicker({Key? key, required this.apiKey, this.mapData, this.marker})
+      : super(key: key);
 
   @override
   State<MapsPicker> createState() => _MapsPickerState();
@@ -187,14 +189,15 @@ class _MapsPickerState extends State<MapsPicker> {
 
   Widget _getCustomPin() {
     return Center(
-      child: SizedBox(
-        width: 150,
-        child: Lottie.asset(
-          "assets/pin.json",
-          package: 'max_maps_picker',
-        ),
-        // child: TextWidget('Test'),
-      ),
+      child: widget.marker ??
+          SizedBox(
+            width: 150,
+            child: Lottie.asset(
+              "assets/pin.json",
+              package: 'max_maps_picker',
+            ),
+            // child: TextWidget('Test'),
+          ),
     );
   }
 
