@@ -1,37 +1,55 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart';
-import 'package:max_maps_picker/module/maps/models/place_search_result/place_search_result.dart';
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
+
+class LoggingInterceptor extends InterceptorsWrapper {
+  final int _maxCharactersPerLine = 200;
+}
 
 class PlaceApiRepository {
-  final client = Client();
+  final Dio _dio = Dio();
 
-  PlaceApiRepository(this.sessionToken);
+  Future<Response> getAutoComplete(
+      {required String api, params, bearerToken, apiKey}) async {
+    Response response = await _getApi('${api}place-search',
+        queryParam: params, bearerToken: bearerToken, apiKey: apiKey);
+    return response;
+  }
 
-  final sessionToken;
+  Future<Response> getPlaceDetail(
+      {required String api, params, bearerToken, apiKey}) async {
+    Response response = await _getApi('${api}place-detail',
+        queryParam: params, bearerToken: bearerToken, apiKey: apiKey);
+    return response;
+  }
 
-  Future<List<PlaceSearchResult>> fetchSuggestions(String input, String lang,
-      {required String apiKey}) async {
-    final request =
-        'https://maps.googleapis.com/maps/api/place/textsearch/json?input=$input&types=address&language=$lang&components=country:id&key=$apiKey&sessiontoken=$sessionToken&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&inputtype=textquery';
-    final response = await client.get(Uri.parse(request));
+  Future<Response> _getApi(url, {queryParam, bearerToken, apiKey}) async {
+    _dio.interceptors.add(LoggingInterceptor());
+    _dio.options.headers['Authorization'] = 'Bearer $bearerToken';
+    _dio.options.headers['Accept'] = '*/*';
+    _dio.options.headers['ApiKey'] = apiKey;
+    print('-----');
+    print(url);
+    print(apiKey);
+    print(bearerToken);
+    print(queryParam.toString());
+    print('-----');
 
-    if (response.statusCode == 200) {
-      final result = json.decode(response.body);
-      if (result['status'] == 'OK') {
-        // compose suggestions in a list
-        return result['results']
-            .map<PlaceSearchResult>((p) => PlaceSearchResult.fromJson(p))
-            .toList();
-      }
-      if (result['status'] == 'ZERO_RESULTS') {
-        return [];
-      }
-      throw Exception(result['error_message']);
-    } else {
-      throw Exception('Failed to fetch suggestion');
+    try {
+      Response response = await _dio.get(url, queryParameters: queryParam);
+      print('-----');
+      print(response.statusCode);
+      print('-----');
+      return response;
+    } on DioException catch (error) {
+      if (error.response!.statusCode == 401) {}
+
+      print('-----');
+      print(error.message);
+      print('-----');
+      return error.response!;
     }
   }
 }

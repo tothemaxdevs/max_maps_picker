@@ -6,25 +6,48 @@ abstract class LocationState {}
 
 class LocationInitial extends LocationState {}
 
-class SearchLocationLoadingState extends LocationState {
-  SearchLocationLoadingState();
+class GetAutoCompleteLoadingState extends LocationState {
+  GetAutoCompleteLoadingState();
 }
 
-class SearchLocationInitialState extends LocationState {
-  SearchLocationInitialState();
+class GetAutoCompleteInitialState extends LocationState {
+  GetAutoCompleteInitialState();
 }
 
-class SearchLocationLoadedState extends LocationState {
-  List<PlaceSearchResult> places;
-  SearchLocationLoadedState(this.places);
+class GetAutoCompleteLoadedState extends LocationState {
+  List<Prediction> places;
+  GetAutoCompleteLoadedState(this.places);
 }
 
-class SearchLocationEmptyState extends LocationState {
+class GetAutoCompleteEmptyState extends LocationState {
   String message;
-  SearchLocationEmptyState(this.message);
+  GetAutoCompleteEmptyState(this.message);
 }
 
-class SearchLocationErrorState extends LocationState {
+class GetAutoCompleteErrorState extends LocationState {
   String message;
-  SearchLocationErrorState(this.message);
+  GetAutoCompleteErrorState(this.message);
+}
+
+class GetPlaceDetailLoadingState extends LocationState {
+  GetPlaceDetailLoadingState();
+}
+
+class GetPlaceDetailInitialState extends LocationState {
+  GetPlaceDetailInitialState();
+}
+
+class GetPlaceDetailLoadedState extends LocationState {
+  MapsPlaceDetailResult data;
+  GetPlaceDetailLoadedState(this.data);
+}
+
+class GetPlaceDetailFailedState extends LocationState {
+  String message;
+  GetPlaceDetailFailedState(this.message);
+}
+
+class GetPlaceDetailErrorState extends LocationState {
+  String message;
+  GetPlaceDetailErrorState(this.message);
 }

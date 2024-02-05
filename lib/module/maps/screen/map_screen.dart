@@ -8,17 +8,23 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:max_maps_picker/constants/dimens.constant.dart';
 import 'package:max_maps_picker/constants/divider.constant.dart';
-import 'package:max_maps_picker/module/maps/models/maps_result/maps_result.dart';
+import 'package:max_maps_picker/module/maps/models/maps_result.dart';
 import 'package:max_maps_picker/module/maps/screen/map_autocomplete_widget.dart';
 import 'package:max_maps_picker/utils/view_utils.dart';
 import 'package:max_maps_picker/widget/button/rounded_button.dart';
 import 'package:max_maps_picker/widget/text/text_widget.dart';
 
 class MapsPicker extends StatefulWidget {
-  String apiKey;
+  String apiKey, bearerToken, api;
   MapResult? mapData;
   Widget? marker;
-  MapsPicker({Key? key, required this.apiKey, this.mapData, this.marker})
+  MapsPicker(
+      {Key? key,
+      required this.apiKey,
+      required this.api,
+      required this.bearerToken,
+      this.mapData,
+      this.marker})
       : super(key: key);
 
   @override
@@ -81,7 +87,10 @@ class _MapsPickerState extends State<MapsPicker> {
               EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
           child: MapAutocompleteWidget(
             apiKey: widget.apiKey,
+            bearerToken: widget.bearerToken,
+            api: widget.api,
             onClicked: (value) {
+              print('Called click');
               _gotoSpecificPosition(value);
             },
           ))

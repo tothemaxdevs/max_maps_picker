@@ -9,10 +9,17 @@ import 'package:max_maps_picker/constants/divider.constant.dart';
 import 'package:max_maps_picker/module/maps/bloc/location_bloc.dart';
 import 'package:max_maps_picker/widget/text/text_widget.dart';
 
+import '../../../utils/view_utils.dart';
+
 class MapAutocompleteWidget extends StatefulWidget {
   Function(LatLng)? onClicked;
-  String apiKey;
-  MapAutocompleteWidget({Key? key, this.onClicked, required this.apiKey})
+  String apiKey, api, bearerToken;
+  MapAutocompleteWidget(
+      {Key? key,
+      this.onClicked,
+      required this.apiKey,
+      required this.api,
+      required this.bearerToken})
       : super(key: key);
 
   static const String path = '/base';
@@ -64,10 +71,14 @@ class _MapAutocompleteWidgetState extends State<MapAutocompleteWidget> {
                 controller: locationController,
                 hintText: 'Cari lokasi',
                 onChanged: (query) {
+                  Map<String, dynamic> params = {};
+                  params['input'] = query;
                   _searchLocationBloc.add(
-                    SearchLocationEvent(query.toString(),
-                        Localizations.localeOf(context).languageCode,
-                        apiKey: widget.apiKey),
+                    GetAutoCompleteEvent(
+                        apiKey: widget.apiKey,
+                        params: params,
+                        bearerToken: widget.bearerToken,
+                        api: widget.api),
                   );
                 },
               ),
@@ -77,12 +88,20 @@ class _MapAutocompleteWidgetState extends State<MapAutocompleteWidget> {
         BlocConsumer<LocationBloc, LocationState>(
           bloc: _searchLocationBloc,
           listener: (context, state) {
-            if (state is SearchLocationLoadedState) {
+            if (state is GetAutoCompleteLoadedState) {
               hideList = false;
+            } else if (state is GetPlaceDetailLoadedState) {
+              widget.onClicked!(LatLng(
+                  state.data.data!.geometry!.location!.lat!,
+                  state.data.data!.geometry!.location!.lng!));
+
+              FocusManager.instance.primaryFocus!.unfocus();
+            } else if (state is GetPlaceDetailFailedState) {
+              showToastError(state.message);
             }
           },
           builder: (context, state) {
-            if (state is SearchLocationInitialState) {
+            if (state is GetAutoCompleteInitialState) {
               return Container();
             } else {
               return _buildSearchLocationView(state);
@@ -96,7 +115,7 @@ class _MapAutocompleteWidgetState extends State<MapAutocompleteWidget> {
   Widget _buildSearchLocationView(Object? state) {
     return Builder(
       builder: (context) {
-        if (state is SearchLocationLoadedState) {
+        if (state is GetAutoCompleteLoadedState) {
           return hideList == false
               ? Container(
                   margin: const EdgeInsets.symmetric(
@@ -118,25 +137,29 @@ class _MapAutocompleteWidgetState extends State<MapAutocompleteWidget> {
                           state.places.length > 5 ? 5 : state.places.length,
                           (index) => listSearch(
                               onTap: () {
-                                widget.onClicked!(LatLng(
-                                    state
-                                        .places[index].geometry!.location!.lat!,
-                                    state.places[index].geometry!.location!
-                                        .lng!));
+                                Map<String, dynamic> params = {};
+                                params['place_id'] =
+                                    state.places[index].placeId;
+                                _searchLocationBloc.add(
+                                  GetPlaceDetailEvent(
+                                      apiKey: widget.apiKey,
+                                      params: params,
+                                      bearerToken: widget.bearerToken,
+                                      api: widget.api),
+                                );
 
                                 setState(() {
                                   locationController.text =
-                                      '${state.places[index].name ?? ''}, ${state.places[index].name ?? ''}';
+                                      '${state.places[index].mainText ?? ''}, ${state.places[index].mainText ?? ''}';
                                   hideList = true;
                                 });
-                                FocusManager.instance.primaryFocus!.unfocus();
                               },
-                              placeName: state.places[index].name,
+                              placeName: state.places[index].mainText,
                               placeAddress:
-                                  state.places[index].formattedAddress))),
+                                  state.places[index].secondaryText))),
                 )
               : const SizedBox(width: 0.0, height: 0.0);
-        } else if (state is SearchLocationEmptyState) {
+        } else if (state is GetAutoCompleteEmptyState) {
           return Center(
             child: TextWidget(
               'Tidak ditemukan',
@@ -229,10 +252,6 @@ class MaxSearchBar extends StatelessWidget {
             ),
             onChanged: onChanged,
             decoration: InputDecoration(
-              // contentPadding: const EdgeInsets.symmetric(
-              //   horizontal: 10,
-              //   vertical: 10,
-              // ),
               border: InputBorder.none,
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none,

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:max_maps_picker/constants/dimens.constant.dart';
 import 'package:max_maps_picker/max_map_picker.dart';
@@ -58,7 +57,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 100,
               ),
               MaxMapsPicker(
-                apiKey: '',
+                apiKey: '0f99beea-bfbf-11ec-9708-ef87d9a9c4d9',
+                api: 'https://customer.backend.dev.orderia.id/api/v1/',
+                bearerToken:
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMwNWRiZWRiLTdhYzAtNGYwMC1hNGMxLTQyMDRlYzViMzY4MSIsImlhdCI6MTcwNjI1NjY4MH0.9s_gUeF0x0_KPFR3XG7G-SrFr5fpYyMMt_hW5V1f01c',
                 child: Container(
                   color: Colors.blue,
                   padding: const EdgeInsets.symmetric(
