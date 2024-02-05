@@ -191,7 +191,7 @@ class _MapsPickerState extends State<MapsPicker> {
     return Center(
       child: widget.marker ??
           SizedBox(
-            width: 150,
+            width: 70,
             child: Lottie.asset(
               "assets/pin.json",
               package: 'max_maps_picker',
