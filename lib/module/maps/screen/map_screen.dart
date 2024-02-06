@@ -65,14 +65,6 @@ class _MapsPickerState extends State<MapsPicker> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: _buildBody(),
-
-      //get a float button to click and go to current location
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     _gotoUserCurrentPosition();
-      //   },
-      //   child: const Icon(Icons.location_on),
-      // ),
     );
   }
 
@@ -99,8 +91,6 @@ class _MapsPickerState extends State<MapsPicker> {
     return SafeArea(
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        // height: MediaQuery.of(context).size.height * 0.28,
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -214,8 +204,9 @@ class _MapsPickerState extends State<MapsPicker> {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark address = placemarks[0]; // get only first and closest address
+
     String addresStr =
-        "${address.street}, ${address.locality}, ${address.administrativeArea}, ${address.country}";
+        "${address.subLocality}, ${address.locality}, ${address.subAdministrativeArea}, ${address.administrativeArea}, ${address.country}";
     setState(() {
       _draggedAddress = addresStr;
     });

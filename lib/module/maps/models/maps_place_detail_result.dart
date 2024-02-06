@@ -1,90 +1,85 @@
 class MapsPlaceDetailResult {
-  bool? success;
-  String? message;
-  PlaceDetail? data;
+  final bool? success;
+  final String? message;
+  final PlaceData? data;
 
-  MapsPlaceDetailResult({
-    this.success,
-    this.message,
-    this.data,
-  });
+  MapsPlaceDetailResult({this.success, this.message, this.data});
 
   factory MapsPlaceDetailResult.fromJson(Map<String, dynamic> json) {
     return MapsPlaceDetailResult(
       success: json['success'],
       message: json['message'],
-      data: PlaceDetail.fromJson(json['data']),
+      data: PlaceData.fromJson(json['data']),
     );
   }
 }
 
-class PlaceDetail {
-  String? formattedAddress;
-  Geometry? geometry;
-  String? name;
+class PlaceData {
+  final Place? placeDetail;
 
-  PlaceDetail({
-    this.formattedAddress,
-    this.geometry,
-    this.name,
-  });
+  PlaceData({this.placeDetail});
 
-  factory PlaceDetail.fromJson(Map<String, dynamic> json) {
-    return PlaceDetail(
+  factory PlaceData.fromJson(Map<String, dynamic> json) {
+    return PlaceData(
+      placeDetail: Place.fromJson(json['place_detail']),
+    );
+  }
+}
+
+class Place {
+  final String? formattedAddress;
+  final PlaceGeometry? geometry;
+  final String? name;
+
+  Place({this.formattedAddress, this.geometry, this.name});
+
+  factory Place.fromJson(Map<String, dynamic> json) {
+    return Place(
       formattedAddress: json['formatted_address'],
-      geometry: Geometry.fromJson(json['geometry']),
+      geometry: PlaceGeometry.fromJson(json['geometry']),
       name: json['name'],
     );
   }
 }
 
-class Geometry {
-  Location? location;
-  Viewport? viewport;
+class PlaceGeometry {
+  final PlaceLocation? location;
+  final PlaceViewport? viewport;
 
-  Geometry({
-    this.location,
-    this.viewport,
-  });
+  PlaceGeometry({this.location, this.viewport});
 
-  factory Geometry.fromJson(Map<String, dynamic> json) {
-    return Geometry(
-      location: Location.fromJson(json['location']),
-      viewport: Viewport.fromJson(json['viewport']),
+  factory PlaceGeometry.fromJson(Map<String, dynamic> json) {
+    return PlaceGeometry(
+      location: PlaceLocation.fromJson(json['location']),
+      viewport: PlaceViewport.fromJson(json['viewport']),
     );
   }
 }
 
-class Location {
-  double? lat;
-  double? lng;
+class PlaceLocation {
+  final double? lat;
+  final double? lng;
 
-  Location({
-    this.lat,
-    this.lng,
-  });
+  PlaceLocation({this.lat, this.lng});
 
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
+  factory PlaceLocation.fromJson(Map<String, dynamic> json) {
+    return PlaceLocation(
       lat: json['lat'],
       lng: json['lng'],
     );
   }
 }
 
-class Viewport {
-  Location? northeast;
-  Location? southwest;
+class PlaceViewport {
+  final PlaceLocation? northeast;
+  final PlaceLocation? southwest;
 
-  Viewport({
-    this.northeast,
-    this.southwest,
-  });
+  PlaceViewport({this.northeast, this.southwest});
 
-  factory Viewport.fromJson(Map<String, dynamic> json) {
-    return Viewport(
-      northeast: Location.fromJson(json['northeast']),
-      southwest: Location.fromJson(json['southwest']),
+  factory PlaceViewport.fromJson(Map<String, dynamic> json) {
+    return PlaceViewport(
+      northeast: PlaceLocation.fromJson(json['northeast']),
+      southwest: PlaceLocation.fromJson(json['southwest']),
     );
   }
 }

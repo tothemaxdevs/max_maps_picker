@@ -1,11 +1,12 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:max_maps_picker/module/maps/api/place_api_repository.dart';
 import 'package:max_maps_picker/module/maps/models/maps_autocomplete_result.dart';
 import 'package:max_maps_picker/module/maps/models/maps_place_detail_result.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:uuid/uuid.dart';
 
 part 'location_event.dart';
 part 'location_state.dart';
@@ -45,7 +46,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           emit(GetAutoCompleteEmptyState('Search location empty'));
         }
       }
-    } catch (e) {
+    } on DioException catch (e) {
       emit(GetAutoCompleteErrorState(e.toString()));
     }
   }
@@ -58,6 +59,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       emit(GetPlaceDetailLoadingState());
       final data = await _placeApiProvider.getPlaceDetail(
           apiKey: event.apiKey, api: event.api!, params: event.params);
+
+      log(data.data.toString());
       if (data.statusCode == 200) {
         MapsPlaceDetailResult result =
             MapsPlaceDetailResult.fromJson(data.data);
@@ -66,7 +69,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       } else {
         emit(GetPlaceDetailFailedState('Search location empty'));
       }
-    } catch (e) {
+    } on DioException catch (e) {
       emit(GetPlaceDetailErrorState(e.toString()));
     }
   }

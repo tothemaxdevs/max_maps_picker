@@ -26,24 +26,13 @@ class PlaceApiRepository {
     _dio.interceptors.add(LoggingInterceptor());
     _dio.options.headers['Accept'] = '*/*';
     _dio.options.headers['ApiKey'] = apiKey;
-    print('-----');
-    print(url);
-    print(apiKey);
-    print(queryParam.toString());
-    print('-----');
 
     try {
       Response response = await _dio.get(url, queryParameters: queryParam);
-      print('-----');
-      print(response.statusCode);
-      print('-----');
       return response;
     } on DioException catch (error) {
       if (error.response!.statusCode == 401) {}
 
-      print('-----');
-      print(error.message);
-      print('-----');
       return error.response!;
     }
   }

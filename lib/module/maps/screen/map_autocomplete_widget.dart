@@ -44,22 +44,27 @@ class _MapAutocompleteWidgetState extends State<MapAutocompleteWidget> {
       children: [
         Row(
           children: [
-            Container(
-              height: 48,
-              width: 48,
-              margin: const EdgeInsets.only(left: Dimens.size16),
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(100)),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade100, // Shadow color
-                    blurRadius: 4, // Spread of the shadow
-                    offset: const Offset(0, 4), // Offset of the shadow (x, y)
-                  ),
-                ],
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 48,
+                width: 48,
+                margin: const EdgeInsets.only(left: Dimens.size16),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(100)),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade100, // Shadow color
+                      blurRadius: 4, // Spread of the shadow
+                      offset: const Offset(0, 4), // Offset of the shadow (x, y)
+                    ),
+                  ],
+                ),
+                child: const Icon(Icons.arrow_back),
               ),
-              child: const Icon(Icons.arrow_back),
             ),
             Flexible(
               child: MaxSearchBar(
@@ -76,6 +81,7 @@ class _MapAutocompleteWidgetState extends State<MapAutocompleteWidget> {
                 },
               ),
             ),
+            divideW14,
           ],
         ),
         BlocConsumer<LocationBloc, LocationState>(
@@ -85,8 +91,8 @@ class _MapAutocompleteWidgetState extends State<MapAutocompleteWidget> {
               hideList = false;
             } else if (state is GetPlaceDetailLoadedState) {
               widget.onClicked!(LatLng(
-                  state.data.data!.geometry!.location!.lat!,
-                  state.data.data!.geometry!.location!.lng!));
+                  state.data.data!.placeDetail!.geometry!.location!.lat!,
+                  state.data.data!.placeDetail!.geometry!.location!.lng!));
 
               FocusManager.instance.primaryFocus!.unfocus();
             } else if (state is GetPlaceDetailFailedState) {
@@ -142,7 +148,7 @@ class _MapAutocompleteWidgetState extends State<MapAutocompleteWidget> {
 
                                 setState(() {
                                   locationController.text =
-                                      '${state.places[index].mainText ?? ''}, ${state.places[index].mainText ?? ''}';
+                                      '${state.places[index].mainText ?? ''}, ${state.places[index].secondaryText ?? ''}';
                                   hideList = true;
                                 });
                               },
