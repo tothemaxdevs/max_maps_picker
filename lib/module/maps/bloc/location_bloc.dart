@@ -35,10 +35,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     try {
       emit(GetAutoCompleteLoadingState());
       final data = await _placeApiProvider.getAutoComplete(
-          apiKey: event.apiKey,
-          api: event.api!,
-          bearerToken: event.bearerToken,
-          params: event.params);
+          apiKey: event.apiKey, api: event.api!, params: event.params);
       if (data.statusCode == 200) {
         MapsAutocompleteResult result =
             MapsAutocompleteResult.fromJson(data.data);
@@ -60,10 +57,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     try {
       emit(GetPlaceDetailLoadingState());
       final data = await _placeApiProvider.getPlaceDetail(
-          apiKey: event.apiKey,
-          api: event.api!,
-          bearerToken: event.bearerToken,
-          params: event.params);
+          apiKey: event.apiKey, api: event.api!, params: event.params);
       if (data.statusCode == 200) {
         MapsPlaceDetailResult result =
             MapsPlaceDetailResult.fromJson(data.data);

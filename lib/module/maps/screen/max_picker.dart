@@ -3,7 +3,7 @@ import 'package:max_maps_picker/module/maps/models/maps_result.dart';
 import 'package:max_maps_picker/module/maps/screen/map_screen.dart';
 
 class MaxMapsPicker extends StatefulWidget {
-  String apiKey, api, bearerToken;
+  String apiKey, api;
   MapResult? initialData;
   Function(MapResult)? onResult;
   Widget child;
@@ -15,8 +15,7 @@ class MaxMapsPicker extends StatefulWidget {
       this.onResult,
       this.marker,
       this.initialData,
-      required this.api,
-      required this.bearerToken})
+      required this.api})
       : super(key: key);
 
   @override
@@ -37,12 +36,10 @@ class _MaxMapsPickerState extends State<MaxMapsPicker> {
             context,
             MaterialPageRoute(
                 builder: (context) => MapsPicker(
-                      apiKey: widget.apiKey,
-                      mapData: widget.initialData,
-                      marker: widget.marker,
-                      api: widget.api,
-                      bearerToken: widget.bearerToken,
-                    )));
+                    apiKey: widget.apiKey,
+                    mapData: widget.initialData,
+                    marker: widget.marker,
+                    api: widget.api)));
         if (maps != null) {
           widget.onResult!(maps);
         }

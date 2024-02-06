@@ -15,14 +15,13 @@ import 'package:max_maps_picker/widget/button/rounded_button.dart';
 import 'package:max_maps_picker/widget/text/text_widget.dart';
 
 class MapsPicker extends StatefulWidget {
-  String apiKey, bearerToken, api;
+  String apiKey, api;
   MapResult? mapData;
   Widget? marker;
   MapsPicker(
       {Key? key,
       required this.apiKey,
       required this.api,
-      required this.bearerToken,
       this.mapData,
       this.marker})
       : super(key: key);
@@ -87,7 +86,6 @@ class _MapsPickerState extends State<MapsPicker> {
               EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
           child: MapAutocompleteWidget(
             apiKey: widget.apiKey,
-            bearerToken: widget.bearerToken,
             api: widget.api,
             onClicked: (value) {
               print('Called click');

@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 
 class LoggingInterceptor extends InterceptorsWrapper {
@@ -12,28 +10,25 @@ class PlaceApiRepository {
   final Dio _dio = Dio();
 
   Future<Response> getAutoComplete(
-      {required String api, params, bearerToken, apiKey}) async {
-    Response response = await _getApi('${api}place-search',
-        queryParam: params, bearerToken: bearerToken, apiKey: apiKey);
+      {required String api, params, apiKey}) async {
+    Response response =
+        await _getApi('${api}place-search', queryParam: params, apiKey: apiKey);
     return response;
   }
 
-  Future<Response> getPlaceDetail(
-      {required String api, params, bearerToken, apiKey}) async {
-    Response response = await _getApi('${api}place-detail',
-        queryParam: params, bearerToken: bearerToken, apiKey: apiKey);
+  Future<Response> getPlaceDetail({required String api, params, apiKey}) async {
+    Response response =
+        await _getApi('${api}place-detail', queryParam: params, apiKey: apiKey);
     return response;
   }
 
-  Future<Response> _getApi(url, {queryParam, bearerToken, apiKey}) async {
+  Future<Response> _getApi(url, {queryParam, apiKey}) async {
     _dio.interceptors.add(LoggingInterceptor());
-    _dio.options.headers['Authorization'] = 'Bearer $bearerToken';
     _dio.options.headers['Accept'] = '*/*';
     _dio.options.headers['ApiKey'] = apiKey;
     print('-----');
     print(url);
     print(apiKey);
-    print(bearerToken);
     print(queryParam.toString());
     print('-----');
 

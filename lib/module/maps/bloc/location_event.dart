@@ -7,15 +7,13 @@ abstract class LocationEvent {}
 class SearchLocationInitialEvent extends LocationEvent {}
 
 class GetAutoCompleteEvent extends LocationEvent {
-  String? api, apiKey, bearerToken;
+  String? api, apiKey;
   Map<String, dynamic> params;
-  GetAutoCompleteEvent(
-      {required this.params, this.api, this.bearerToken, this.apiKey});
+  GetAutoCompleteEvent({required this.params, this.api, this.apiKey});
 }
 
 class GetPlaceDetailEvent extends LocationEvent {
-  String? api, apiKey, bearerToken;
+  String? api, apiKey;
   Map<String, dynamic> params;
-  GetPlaceDetailEvent(
-      {required this.params, this.api, this.bearerToken, this.apiKey});
+  GetPlaceDetailEvent({required this.params, this.api, this.apiKey});
 }

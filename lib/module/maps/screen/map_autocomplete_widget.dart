@@ -13,13 +13,9 @@ import '../../../utils/view_utils.dart';
 
 class MapAutocompleteWidget extends StatefulWidget {
   Function(LatLng)? onClicked;
-  String apiKey, api, bearerToken;
+  String apiKey, api;
   MapAutocompleteWidget(
-      {Key? key,
-      this.onClicked,
-      required this.apiKey,
-      required this.api,
-      required this.bearerToken})
+      {Key? key, this.onClicked, required this.apiKey, required this.api})
       : super(key: key);
 
   static const String path = '/base';
@@ -75,10 +71,7 @@ class _MapAutocompleteWidgetState extends State<MapAutocompleteWidget> {
                   params['input'] = query;
                   _searchLocationBloc.add(
                     GetAutoCompleteEvent(
-                        apiKey: widget.apiKey,
-                        params: params,
-                        bearerToken: widget.bearerToken,
-                        api: widget.api),
+                        apiKey: widget.apiKey, params: params, api: widget.api),
                   );
                 },
               ),
@@ -144,7 +137,6 @@ class _MapAutocompleteWidgetState extends State<MapAutocompleteWidget> {
                                   GetPlaceDetailEvent(
                                       apiKey: widget.apiKey,
                                       params: params,
-                                      bearerToken: widget.bearerToken,
                                       api: widget.api),
                                 );
 
